@@ -328,6 +328,10 @@
     [
       "12e93b0c-a239-457f-b141-0c3b73a9b90a",
       "Power"
+    ],
+    [
+      "28fd1fbc-026b-4dd2-b303-4aef81adb474",
+      "Stepper"
     ]
   ],
   "text_variables": {}
