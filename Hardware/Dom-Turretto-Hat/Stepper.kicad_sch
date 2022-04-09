@@ -445,7 +445,7 @@
   )
 
   (no_connect (at 148.59 60.96) (uuid b0e090bf-cd7d-4554-8ccc-12a839389221))
-  (no_connect (at 148.59 121.92) (uuid b0e090bf-cd7d-4554-8ccc-12a839389221))
+  (no_connect (at 148.59 121.92) (uuid b0e090bf-cd7d-4554-8ccc-12a839389222))
 
   (wire (pts (xy 158.75 83.82) (xy 161.29 83.82))
     (stroke (width 0) (type default) (color 0 0 0 0))
