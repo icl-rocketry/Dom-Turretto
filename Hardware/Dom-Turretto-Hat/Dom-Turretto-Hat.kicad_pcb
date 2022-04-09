@@ -39,6 +39,7 @@
 
   (setup
     (pad_to_mask_clearance 0)
+    (grid_origin 176.5 130.5)
     (pcbplotparams
       (layerselection 0x00010fc_ffffffff)
       (disableapertmacros false)
@@ -3271,10 +3272,9 @@
     )
   )
 
-  (gr_line (start 116 134) (end 173 134) (layer "Edge.Cuts") (width 0.1) (tstamp 159e78dc-37bf-4121-a1e4-17e7169f19cf))
-  (gr_line (start 115 78) (end 173.5 78) (layer "Edge.Cuts") (width 0.1) (tstamp 40d5dfae-4d08-40a0-bc52-959743c5745c))
+  (gr_line (start 114.5 134) (end 173 134) (layer "Edge.Cuts") (width 0.1) (tstamp 159e78dc-37bf-4121-a1e4-17e7169f19cf))
+  (gr_line (start 114.5 78) (end 173.5 78) (layer "Edge.Cuts") (width 0.1) (tstamp 40d5dfae-4d08-40a0-bc52-959743c5745c))
   (gr_arc (start 116.5 114) (mid 116.207107 114.707107) (end 115.5 115) (layer "Edge.Cuts") (width 0.1) (tstamp 5695194d-cc65-4936-b07b-fe9d9db851b1))
-  (gr_line (start 111.5 134) (end 156.5 134) (layer "Edge.Cuts") (width 0.1) (tstamp 569afdef-1ad9-47f0-bacb-805cf9bab42e))
   (gr_line (start 115.5 115) (end 112.5 115) (layer "Edge.Cuts") (width 0.1) (tstamp 5b951f2a-4413-44ca-ae46-31cc19583e2b))
   (gr_arc (start 114.5 134) (mid 112.37868 133.12132) (end 111.5 131) (layer "Edge.Cuts") (width 0.1) (tstamp 5e0093ca-08fd-417e-bd19-e19511f5dd7f))
   (gr_line (start 111.5 116) (end 111.5 131) (layer "Edge.Cuts") (width 0.1) (tstamp 897e91f4-c4ae-40b2-ab00-8375b2faca0a))
