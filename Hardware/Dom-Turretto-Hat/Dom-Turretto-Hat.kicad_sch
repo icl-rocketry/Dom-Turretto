@@ -1701,7 +1701,7 @@
       (reference "J3") (unit 1) (value "Barrel_Jack_Switch") (footprint "Connector_BarrelJack:BarrelJack_Wuerth_6941xx301002")
     )
     (path "/12e93b0c-a239-457f-b141-0c3b73a9b90a/acb976e5-4afe-45ae-bace-6e56185fabf9"
-      (reference "J4") (unit 1) (value "Conn_01x02") (footprint "Connector_AMASS:AMASS_XT60-F_1x02_P7.20mm_Vertical")
+      (reference "J4") (unit 1) (value "Conn_01x02") (footprint "Connector_AMASS:AMASS_XT60-M_1x02_P7.20mm_Vertical")
     )
     (path "/a4265e2c-06a9-41da-b42d-91d87bbe6b18"
       (reference "JP1") (unit 1) (value "SolderJumper_2_Open") (footprint "Jumper:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm")
