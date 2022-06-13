@@ -1,3 +1,4 @@
+import socketio
 
 class FlyingObject:
     '''
