@@ -1,7 +1,7 @@
-import time
 import math
 import board
-from adafruit_motorkit import MotorKit, stepper
+from adafruit_motorkit import MotorKit
+from adafruit_motor import stepper
 import geopy.distance as geodist
 
 import FlyingObject
