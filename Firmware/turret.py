@@ -54,61 +54,89 @@ class ServoPointer:
         '''
         num_steps = (self._target_pos[idx] - self._pos[idx])*stps_per_deg
 
-        if abs(num_steps) >= 1:
-            if num_steps > 0:
-                stepper_obj.onestep(direction=stepper.FORWARD, style=stepper.DOUBLE)
-                self._pos[idx] = self._pos[idx] + 1/stps_per_deg
-            else:
-                stepper_obj.onestep(direction=stepper.BACKWARD, style=stepper.DOUBLE)
-                self._pos[idx] = self._pos[idx] - 1/stps_per_deg
+        # if abs(num_steps) >= 1:
+        if num_steps > 0:
+            stepper_obj.onestep(direction=stepper.FORWARD, style=stepper.SINGLE)
+            self._pos[idx] = self._pos[idx] + 1/stps_per_deg
+        else:
+            stepper_obj.onestep(direction=stepper.BACKWARD, style=stepper.SINGLE)
+            self._pos[idx] = self._pos[idx] - 1/stps_per_deg
 
-        elif abs(num_steps) < 1:
-            if num_steps > 0:
-                stepper_obj.onestep(direction=stepper.FORWARD, style=stepper.MICROSTEP)
-                self._pos[idx] = self._pos[idx] + 1/stps_per_deg
-            else:
-                stepper_obj.onestep(direction=stepper.BACKWARD, style=stepper.MICROSTEP)
-                self._pos[idx] = self._pos[idx] - 1/stps_per_deg
+        # elif abs(num_steps) < 1:
+        #     if num_steps > 0:
+        #         stepper_obj.onestep(direction=stepper.FORWARD, style=stepper.MICROSTEP)
+        #         self._pos[idx] = self._pos[idx] + 1/stps_per_deg
+        #     else:
+        #         stepper_obj.onestep(direction=stepper.BACKWARD, style=stepper.MICROSTEP)
+        #         self._pos[idx] = self._pos[idx] - 1/stps_per_deg
 
 
 class TurretGPS:
     '''
     USB GPS connected to Dom Turretto
     '''
-    def __init__(self):
+    def __init__(self, FO = 0):
         self.lat = 0
         self.long = 0
         self.alt = 0
+        self.FO = FO
 
-    def calc_direction(self, FO):
+    def calc_direction(self, target_lat = 0, target_long = 0, target_alt = 0):
         '''
             Calculate the heading direction between Dom Turretto and the Flying object
             return tuple containing (altitude, azimuth) of target
         '''
-        # Calculate the distance in north and east directions
-        # Using the launch location of the rocket as the reference for latitude/longitude calculations
-        north_start_distance = geodist.geodesic(
-            (self.lat, FO.start_long),
-            (FO.start_lat, FO.start_long) ).m
-        east_start_distance = geodist.geodesic(
-            (FO.start_lat, self.long),
-            (FO.start_lat, FO.start_long) ).m
+        if self.FO:
 
-        # Add signs to these distances to convert to point in NE FOR relative to turret
-        # Note that this will not work at the north pole, or at the international date line.
-        if self.lat - FO.start_lat < 0:
-            north_coord = north_start_distance + FO.pn
+            # Calculate the distance in north and east directions
+            # Using the launch location of the rocket as the reference for latitude/longitude calculations
+            north_ref_distance = geodist.geodesic(
+                (self.lat, self.FO.ref_long),
+                (self.FO.ref_lat, self.FO.ref_long) ).m
+            east_ref_distance = geodist.geodesic(
+                (self.FO.ref_lat, self.long),
+                (self.FO.ref_lat, self.FO.ref_long) ).m
+
+            # Add signs to these distances to convert to point in NE self.FOR relative to turret
+            # Note that this will not work at the north pole, or at the international date line.
+            if self.lat - self.FO.ref_lat < 0:
+                north_coord = north_ref_distance + self.FO.off_n
+            else:
+                north_coord = -north_ref_distance + self.FO.off_n
+
+            if self.long - self.FO.ref_long < 0:
+                east_coord = east_ref_distance + self.FO.off_e
+            else:
+                east_coord = -east_ref_distance + self.FO.off_e
+
+            # Assuming flat earth for down coord; if earth's spherical nature starts is a problem,
+            # you should really start using something better than a random stepper driver on a Pi.
+            down_coord = self.FO.ref_alt - self.FO.off_d - self.alt
         else:
-            north_coord = -north_start_distance + FO.pn
+            # Calculate the distance in north and east directions
+            # Using the launch location of the rocket as the reference for latitude/longitude calculations
+            north_ref_distance = geodist.geodesic(
+                (self.lat, target_long),
+                (target_lat, target_long) ).m
+            east_ref_distance = geodist.geodesic(
+                (target_lat, self.long),
+                (target_lat, target_long) ).m
 
-        if self.long - FO.start_long < 0:
-            east_coord = east_start_distance + FO.pe
-        else:
-            east_coord = -east_start_distance + FO.pe
+            # Add signs to these distances to convert to point in NE self.FOR relative to turret
+            # Note that this will not work at the north pole, or at the international date line.
+            if self.lat - target_lat < 0:
+                north_coord = north_ref_distance
+            else:
+                north_coord = -north_ref_distance
 
-        # Assuming flat earth for down coord; if earth's spherical nature starts is a problem,
-        # you should really start using something better than a random stepper driver on a Pi.
-        down_coord = FO.start_alt - FO.pd - self.alt
+            if self.long - target_long < 0:
+                east_coord = east_ref_distance
+            else:
+                east_coord = -east_ref_distance
+
+            # Assuming flat earth for down coord; if earth's spherical nature starts is a problem,
+            # you should really start using something better than a random stepper driver on a Pi.
+            down_coord = target_alt - self.alt
 
         # Calculate altitude and azimuth from these coordinates, in degrees
         tgt_alt = math.atan(-down_coord/math.sqrt(north_coord**2 + east_coord**2))*180/math.pi
@@ -128,7 +156,7 @@ class Turret:
         self.stepper_rig = ServoPointer(self._motor_kit.stepper1, self._motor_kit.stepper2)
 
         self.tgt_object = FO
-        self.gps = TurretGPS()
+        self.gps = TurretGPS(FO)
 
 
     def set_heading(self, base_heading):
@@ -136,14 +164,15 @@ class Turret:
         Set the heading of the turret when it has been turned on
         '''
         self._heading = base_heading
+    def set_alt_azi()
 
-    def set_tgt(self, tgt_alt = 0, tgt_azi = 0):
+    def set_tgt(self, tgt_lat = 0, tgt_long = 0, ):
         '''
         Set the heading that the turret should point towards
         Set to the direction of the target object if set
         '''
         if self.tgt_object:
-            tgt_dir = self.gps.calc_direction(self.tgt_object)
+            tgt_dir = self.gps.calc_direction()
             self.stepper_rig.set_target(tgt_dir[0], tgt_dir[1]-self._heading)
         else:
             self.stepper_rig.set_target(tgt_alt, tgt_azi-self._heading)
