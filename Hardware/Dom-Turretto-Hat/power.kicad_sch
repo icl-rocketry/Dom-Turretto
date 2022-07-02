@@ -2040,7 +2040,7 @@
     (property "Value" "Conn_01x02" (id 1) (at 55.88 52.0701 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "" (id 2) (at 58.42 54.61 0)
+    (property "Footprint" "Connector_AMASS:AMASS_XT60-M_1x02_P7.20mm_Vertical" (id 2) (at 58.42 54.61 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (id 3) (at 58.42 54.61 0)
