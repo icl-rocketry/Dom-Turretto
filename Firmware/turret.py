@@ -3,8 +3,10 @@ import board
 from adafruit_motorkit import MotorKit
 from adafruit_motor import stepper
 import geopy.distance as geodist
+import RPi.GPIO as GPIO
+from RpiMotorLib import RpiMotorLib
 
-import FlyingObject
+import FO
 
 class ServoPointer:
     '''
@@ -14,7 +16,7 @@ class ServoPointer:
         self.alt_stepper = alt_stepper_obj
         self.azi_stepper = azi_stepper_obj
 
-        self._alt_stp_deg = 1 # Number of steps to move 1 degree
+        self._alt_stp_deg = 3.472 # Number of steps to move 1 degree
         self._azi_stp_deg = 1 # Number of steps to move 1 degree
         self._target_pos = [0, 0] # [target altitude, target azimuth]
         self._pos = [0,0]
@@ -164,7 +166,9 @@ class Turret:
         Set the heading of the turret when it has been turned on
         '''
         self._heading = base_heading
-    def set_alt_azi()
+    def set_alt_azi():
+        '''
+        '''
 
     def set_tgt(self, tgt_lat = 0, tgt_long = 0, ):
         '''

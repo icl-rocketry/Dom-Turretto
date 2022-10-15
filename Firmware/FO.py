@@ -17,7 +17,7 @@ class FlyingObject:
         self.ref_lat = 0
         self.ref_long = 0
         self.ref_alt = 0
-
+     
     def connect_to_address(self, address):
         self.sio.connect(address)
 
@@ -26,7 +26,7 @@ class FlyingObject:
         self.off_n = data['pn']
         self.off_e = data['pe']
         self.off_d = data['pd']
-        self.ref_lat = data['start_lat']
-        self.ref_long = data['start_long']
-        self.ref_alt = data['start_alt']
+        self.ref_lat = data['launch_lat']
+        self.ref_long = data['launch_lng']
+        self.ref_alt = data['launch_alt']
 
