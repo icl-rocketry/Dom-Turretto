@@ -3,8 +3,10 @@ import board
 from adafruit_motorkit import MotorKit
 from adafruit_motor import stepper
 import geopy.distance as geodist
+import RpiMotorLib
 
 import FlyingObject
+
 
 class ServoPointer:
     '''
@@ -14,8 +16,8 @@ class ServoPointer:
         self.alt_stepper = alt_stepper_obj
         self.azi_stepper = azi_stepper_obj
 
-        self._alt_stp_deg = 1 # Number of steps to move 1 degree
-        self._azi_stp_deg = 1 # Number of steps to move 1 degree
+        self._alt_stp_deg = 0.288 # Number of steps to move 1 degree
+        self._azi_stp_deg = 0.225 # Number of steps to move 1 degree
         self._target_pos = [0, 0] # [target altitude, target azimuth]
         self._pos = [0,0]
 
@@ -56,10 +58,11 @@ class ServoPointer:
 
         # if abs(num_steps) >= 1:
         if num_steps > 0:
-            stepper_obj.onestep(direction=stepper.FORWARD, style=stepper.SINGLE)
+            # motor_go(clockwise, steptype", steps, stepdelay, verbose, initdelay)
+            stepper_obj.motor_go(False, "Full" , num_steps, .05, True, .05)
             self._pos[idx] = self._pos[idx] + 1/stps_per_deg
         else:
-            stepper_obj.onestep(direction=stepper.BACKWARD, style=stepper.SINGLE)
+            stepper_obj.motor_go(True, "Full" , num_steps, .05, True, .05)
             self._pos[idx] = self._pos[idx] - 1/stps_per_deg
 
         # elif abs(num_steps) < 1:
@@ -153,6 +156,17 @@ class Turret:
     def __init__(self, FO = 0):
         self._heading = 0 # Heading that the base is facing
         self._motor_kit = MotorKit(i2c=board.I2C())
+
+        # Stepper 1 - altitude
+        self.direction1= 22
+        self.step1= 22
+        GPIO_pins=(-1,-1,-1)
+        self.stepper1 = RpiMotorLib.A4988Nema(self.direction1, self.step1, GPIO_pins, "A4988")
+        # Stepper 2 - azimuth
+        self.direction2= 25
+        self.step2= 23
+        self.stepper2 = RpiMotorLib.A4988Nema(self.direction2, self.step2, GPIO_pins, "A4988")
+
         self.stepper_rig = ServoPointer(self._motor_kit.stepper1, self._motor_kit.stepper2)
 
         self.tgt_object = FO
@@ -164,7 +178,7 @@ class Turret:
         Set the heading of the turret when it has been turned on
         '''
         self._heading = base_heading
-    def set_alt_azi()
+    # def set_alt_azi():
 
     def set_tgt(self, tgt_lat = 0, tgt_long = 0, ):
         '''
